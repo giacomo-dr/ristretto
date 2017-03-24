@@ -1,0 +1,36 @@
+// Ristretto samples
+
+/*
+void main(){ 
+	int[] a = {1, -sed[10], ({4 + - 5, -3 && !true}), fante(), "anto".length }; 
+	while( a == 0 )
+		a();
+}
+*/
+
+/*
+void main(){ 
+	if( a == 3 )
+		a();
+	else if( true )
+		c = 7;
+	else
+		z = 4;
+}
+*/
+
+void f( int q, int z ){
+	return;
+}
+
+void main(){ 
+	boolean f = false;
+	
+	if( a == 3 )
+		while( b(a) ){
+			a = a + -1;
+			return z;
+		}
+}
+
+// Slip

@@ -1,0 +1,63 @@
+<project name="Ristretto" default="compile" basedir=".">
+	<description>
+	Ristretto parser and AST generator
+	</description>
+  
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+	</target>
+	
+	<target name="clean" description="clean grammar">
+		<!-- Delete all but .g4 files in the grammar and src directory -->
+		<delete>
+			<fileset dir="./grammar" includes="Ristretto*.*" excludes="*.g4" />
+			<fileset dir="./src/ch/usi/delrig/ristretto/antlrparser" includes="*.java" />
+		</delete>
+	</target>
+	
+	<target name="antlr" depends="clean" description="compile the antlr grammar">
+		<!-- Compile the .g4 file and put it into the source folder -->
+		<java classname="org.antlr.v4.Tool" classpath="./lib/antlr-4.6-complete.jar" fork="true" >
+			<arg value="-no-listener"/>
+			<arg value="-visitor"/>
+			<arg value="./grammar/Ristretto.g4"/>
+		</java>
+		<copy todir="./src/ch/usi/delrig/ristretto/antlrparser">
+			<fileset dir="./grammar" includes="*.java"/>
+		</copy>
+	</target>
+
+	<target name="compile" depends="antlr" description="compile the source">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="./src" destdir="./bin" includeantruntime="false" classpath="./lib/antlr-4.6-complete.jar">
+		</javac>
+	</target>
+
+	<target name="makejar" description="build the Ristretto jar">
+		<jar destfile="./dist/ristretto-delrio.jar">
+			<fileset dir="./bin" />
+			<fileset dir="./dist" includes="*.txt" />
+			<zipfileset includes="**/*.class" src="lib/antlr-4.6-complete.jar"/>
+			<zipfileset includes="**/*.class" src="lib/commons-lang3-3.5.jar"/>
+			<manifest>
+				<attribute name="Created-By" value="Giacomo Del Rio"/>
+				<attribute name="Main-Class" value="ch.usi.delrig.ristretto.Ristr"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<!-- Executes GRUN -->
+	<!-- java -cp "./lib/antlr-4.6-complete.jar:./bin" org.antlr.v4.gui.TestRig ch.usi.delrig.ristretto.antlrparser.Ristretto program -gui -->
+	<target name="grun" description="show parse tree">
+	    <java classname="org.antlr.v4.gui.TestRig" fork="true" >
+	  	  <arg value="ch.usi.delrig.ristretto.antlrparser.Ristretto"/>
+	      <arg value="program"/>
+	      <arg value="-gui"/>
+	      <classpath>
+	    	 <pathelement location="./lib/antlr-4.6-complete.jar"/>
+	      	 <pathelement location="./bin"/>
+	      </classpath>
+	  	</java>
+    </target>
+</project>
