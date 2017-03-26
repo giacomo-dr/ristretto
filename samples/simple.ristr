@@ -1,42 +1,14 @@
 // Ristretto samples
 
 
-extern void println( int[] string );
+int f(){ return 2; }
 
-void sort( int[] a ){
-  qsort( a, 0, a.length-1 );
-}
+extern boolean zug( int a, int b );
 
-void qsort( int[] a, int lo, int hi ){
-  int i = lo;
-  int j = hi;
-  int pivot = a[lo + (hi-lo) / 2];
-
-  // partition around the pivot
-  while( i <= j ){
-    while( a[i] < pivot ){
-      i = i + 1;
+void main( int[] x ){
+    if( true ){
+        int x = 3 + zug( 1, 2 );
     }
-    while( a[j] > pivot ){
-      j = j - 1;
-    }
-    if( i <= j ){
-      int t = a[i];
-      a[i] = a[j];
-      a[j] = t;
-    }
-  }
-
-  if( lo < j )
-    qsort( a, lo, j );
-  if( i < hi )
-    qsort( a, i, hi );
-}
-
-void main(){
-  int[] s = "hello";
-  sort( s );
-  println( s );
 }
 
 

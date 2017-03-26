@@ -1,0 +1,12 @@
+// OK: a bunch of different function calls
+
+int f(){ return 2; }
+
+extern boolean zug( int a, int b );
+
+void main( int[] x ){
+    main( new int[2] );
+    int y = f();
+    boolean b = zug( y, f() );
+    b = !b;
+}

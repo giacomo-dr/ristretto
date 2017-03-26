@@ -13,7 +13,8 @@ public class StaticAnalysisException extends RuntimeException {
 	}
 	
 	@Override public String toString(){
-		String msg = "Module " + pos + ":\n > " + getMessage();
+		String msg = "Module " + pos + ":\n > " + getMessage() +
+		        "\n" + pos.getHilightedFilePortion() + "\n";
 		return msg;
 	}
 }

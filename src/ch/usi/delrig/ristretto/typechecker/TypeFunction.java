@@ -3,33 +3,12 @@ package ch.usi.delrig.ristretto.typechecker;
 import java.util.List;
 
 public class TypeFunction extends Type {
-	
-	public static class Param{
-		public final String name;
-		public final Type type;
 		
-		public Param( String name, Type type ){
-			this.name = name; this.type = type;
-		}
-		
-		@Override public String toString(){
-			return type + " " + name;
-		}
-		
-		@Override 
-		public boolean equals( Object other ){
-			if( other == null ) return false;
-		    if( !(other instanceof Param) ) return false;
-		    Param otherParam = (Param)other;
-		    return name.equals(otherParam.name) && type.equals(otherParam.type);
-		}
-	}
-	
 	public final Type returnType;
 	public final boolean isextern;
-	public final List<Param> parameters;
+	public final List<Type> parameters;
 	
-	public TypeFunction( Type returnType, boolean isextern, List<Param> parameters ){
+	public TypeFunction( Type returnType, boolean isextern, List<Type> parameters ){
 		this.returnType = returnType;
 		this.isextern = isextern;
 		this.parameters = parameters;
@@ -37,14 +16,13 @@ public class TypeFunction extends Type {
 
 	@Override
 	public String toString(){
-		String res = isextern ? "extern " : "";
-		return res + returnType.toString() + toStringParams();
+		return returnType.toString() + toStringParams();
 	}
 	
 	public String toStringParams(){
 		String res = "(";
 		for( int i = 0 ; i < parameters.size() ; i++ )
-			res += parameters.get(i).type + (i == parameters.size() - 1 ? "" : ", ");
+			res += parameters.get(i) + (i == parameters.size() - 1 ? "" : ", ");
 		return res + ")";
 	}
 	

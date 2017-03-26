@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.usi.delrig.ristretto.InstanceParameters;
 import ch.usi.delrig.ristretto.Ristr;
 import ch.usi.delrig.ristretto.ast.Module;
 import ch.usi.delrig.ristretto.typechecker.StaticAnalysisException;
 import ch.usi.delrig.ristretto.typechecker.TypeChecker;
 
 public class StaticAnalysisTest {
+    
+    private static Ristr ristrInstance = new Ristr( new InstanceParameters() );
 
 	public static void main( String[] args ){
 		File dir = new File( args[0] );
@@ -52,14 +55,12 @@ public class StaticAnalysisTest {
 	    String expectedResult = null;
 		try {
 		    expectedResult = getTestExpectedResult( test );
-		    //System.out.println( expectedResult );
-			Module m = Ristr.parseFile( test.getPath() );
+			Module m = ristrInstance.parseFile( test.getPath() );
 			TypeChecker tc = new TypeChecker();
 			List<Module> modules = new ArrayList<Module>();
 			modules.add( m );
 			tc.check( modules );
 		}catch( StaticAnalysisException e ){
-		    //System.out.println(e.getMessage());
 		    if( expectedResult == null )
 		        return false;
 		    else 

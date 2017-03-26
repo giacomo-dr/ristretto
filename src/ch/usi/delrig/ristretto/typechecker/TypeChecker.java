@@ -35,7 +35,6 @@ import ch.usi.delrig.ristretto.ast.StmIfThenElse;
 import ch.usi.delrig.ristretto.ast.StmReturn;
 import ch.usi.delrig.ristretto.ast.StmWhile;
 import ch.usi.delrig.ristretto.typechecker.SymbolTable.Entry;
-import ch.usi.delrig.ristretto.typechecker.TypeFunction.Param;
 
 public class TypeChecker extends RistrettoASTVisitor<Type> {
 	
@@ -376,15 +375,14 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 					t + " found.", e.ide.position );
 		TypeFunction funType = (TypeFunction)t;
 		
-		TypeFunction parametersType = new 
-				TypeFunction( TypeVoid.getInstance(), false, new ArrayList<Param>() );
+		TypeFunction parametersType = new TypeFunction( TypeVoid.getInstance(), false, new ArrayList<Type>() );
 		boolean badArguments = false;
 		for( int i = 0 ; i < e.args.el.size() ; i++ ){
 			Type paramType = e.args.el.get(i).accept( this );
-			parametersType.parameters.add( new Param(null, paramType) );
+			parametersType.parameters.add( paramType );
 			if( i >= funType.parameters.size() )
 				continue;
-			if( !funType.parameters.get(i).type.equals(paramType) )
+			if( !funType.parameters.get(i).equals(paramType) )
 				badArguments = true;
 		}
 		if( e.args.el.size() != funType.parameters.size() )
@@ -441,9 +439,9 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 						+ "' function. Already defined in " + prev.position + ".", d.name.position );
 			
 			Type retType = d.retType == null ? TypeVoid.getInstance() : d.retType.accept( this );
-			List<Param> params = new ArrayList<Param>();
+			List<Type> params = new ArrayList<Type>();
 			for( Parameter p: d.params )
-				params.add( new Param(p.ide.name, p.t.accept( this )) );
+				params.add( p.t.accept( this ) );
 			TypeFunction defType = new TypeFunction( retType, d.b == null, params );
 			symtbl.addSymbol( d.name.name, defType, d.name.position, currentModule );
 		}
