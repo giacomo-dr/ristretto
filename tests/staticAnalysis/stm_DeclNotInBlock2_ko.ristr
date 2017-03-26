@@ -1,0 +1,6 @@
+// KO: Variable declarations are allowed only in blocks.
+
+void main(){
+    while( true )
+        int a = 10;
+}

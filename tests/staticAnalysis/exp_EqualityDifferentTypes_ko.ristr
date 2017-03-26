@@ -1,0 +1,5 @@
+// KO: Comparison operands must have the same type. int vs boolean found.
+
+void main(){
+    boolean x = 10 == true;
+}

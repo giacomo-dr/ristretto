@@ -1,0 +1,6 @@
+// KO: Variable declarations are allowed only in blocks.
+
+void main(){
+    if( true )
+        int a = 10;
+}

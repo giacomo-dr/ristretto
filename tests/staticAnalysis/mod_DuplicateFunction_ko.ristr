@@ -1,0 +1,9 @@
+// KO: Duplicate definition of 'main' function.
+
+void main(){
+    return;
+}
+
+void main(){
+    return;
+}

@@ -1,0 +1,5 @@
+// KO: Variable redeclaration. The name 'x' was already declared in
+
+void main( int x ){
+    int x = 1;
+}

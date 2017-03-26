@@ -1,0 +1,10 @@
+// KO: Variable redeclaration. The name 'j' was already declared in
+
+void main( int x ){
+    while( true ){
+        int j = 3;
+        if( false ){
+            int j = 1;
+        }
+    }
+}

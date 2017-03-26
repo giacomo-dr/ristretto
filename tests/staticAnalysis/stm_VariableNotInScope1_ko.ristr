@@ -1,0 +1,9 @@
+// KO: Undeclared variable 'j'.
+
+void main( int x ){
+    while( true ){
+        int j = 3;
+        j = j + 1;
+    }
+    j = 10;
+}

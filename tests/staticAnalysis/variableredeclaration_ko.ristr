@@ -1,5 +1,0 @@
-// KO: Variable redeclaration
-
-void main(){
-	int main = 1;
-}

@@ -1,0 +1,5 @@
+// KO: The function should return int not boolean.
+
+int main(){
+    return true;
+}

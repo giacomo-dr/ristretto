@@ -1,0 +1,10 @@
+// KO: Undeclared variable 'j'.
+
+void f(){
+    int j = 3;
+    j = -j;
+}
+
+void main( int x ){
+    j = 10;
+}

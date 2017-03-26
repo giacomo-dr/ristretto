@@ -1,8 +1,8 @@
 // KO: Function must return a value. Return expected.
 
-int main(){
+int main( int x ){
     if( true )
         return 1;
     else
-        int c = 10;
+        x = 10;
 }

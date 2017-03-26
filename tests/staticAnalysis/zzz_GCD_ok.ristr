@@ -1,0 +1,17 @@
+// OK: Euclid algorithm
+
+extern int[] int2str( int n );
+extern void println( int[] string );
+
+int gcd(int a, int b) {
+  while (b != 0) {
+    int t = b;
+    b = a % b;
+    a = t;
+  }
+  return a;
+}
+
+void main() {
+  println( int2str( gcd(12, 10) ) );
+}

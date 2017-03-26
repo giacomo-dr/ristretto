@@ -1,4 +1,4 @@
-// KO: Expression of type int expected.
+// KO: Can't compare void() values.
 
 void main(){
 	boolean x = 10 == main;

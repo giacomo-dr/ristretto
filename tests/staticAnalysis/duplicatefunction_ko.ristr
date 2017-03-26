@@ -1,9 +1,0 @@
-// KO: Duplicate function name
-
-void main(){
-	return;
-}
-
-void main(){
-	return;
-}

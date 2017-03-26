@@ -1,19 +1,261 @@
 digraph ristretto {
 	n0 [label="module 'samples/simple.ristr'" shape=rect]
-	n1 [label="def: f()" shape=rect]
+	n1 [label="def: println()" shape=rect]
 	n2 [label="void" shape=underline]
 	n1 -> n2
-	n3 [label="extern" shape=trapezium]
-	n1 -> n3
-	n0 -> n1
-	n4 [label="def: main()" shape=rect]
-	n5 [label="void" shape=underline]
+	n3 [label="par: string" ]
+	n4 [label="Array(1)" shape=underline]
+	n5 [label="Integer" shape=underline]
 	n4 -> n5
-	n6 [label="{...}" shape=trapezium]
-	n7 [label="Call: f" ]
-	n8 [label="ExprList" ]
+	n3 -> n4
+	n1 -> n3
+	n6 [label="extern" shape=trapezium]
+	n1 -> n6
+	n0 -> n1
+	n7 [label="def: sort()" shape=rect]
+	n8 [label="void" shape=underline]
 	n7 -> n8
-	n6 -> n7
-	n4 -> n6
-	n0 -> n4
+	n9 [label="par: a" ]
+	n10 [label="Array(1)" shape=underline]
+	n11 [label="Integer" shape=underline]
+	n10 -> n11
+	n9 -> n10
+	n7 -> n9
+	n12 [label="{...}" shape=trapezium]
+	n13 [label="Call: qsort" ]
+	n14 [label="ExprList" ]
+	n15 [label="a" shape=plaintext, fontname=Courier]
+	n14 -> n15
+	n16 [label="0" shape=plaintext]
+	n14 -> n16
+	n17 [label="-" ]
+	n18 [label="length" ]
+	n19 [label="a" shape=plaintext, fontname=Courier]
+	n18 -> n19
+	n20 [label="1" shape=plaintext]
+	n17 -> n18
+	n17 -> n20
+	n14 -> n17
+	n13 -> n14
+	n12 -> n13
+	n7 -> n12
+	n0 -> n7
+	n21 [label="def: qsort()" shape=rect]
+	n22 [label="void" shape=underline]
+	n21 -> n22
+	n23 [label="par: a" ]
+	n24 [label="Array(1)" shape=underline]
+	n25 [label="Integer" shape=underline]
+	n24 -> n25
+	n23 -> n24
+	n21 -> n23
+	n26 [label="par: lo" ]
+	n27 [label="Integer" shape=underline]
+	n26 -> n27
+	n21 -> n26
+	n28 [label="par: hi" ]
+	n29 [label="Integer" shape=underline]
+	n28 -> n29
+	n21 -> n28
+	n30 [label="{...}" shape=trapezium]
+	n31 [label="decl: i" shape=trapezium]
+	n32 [label="Integer" shape=underline]
+	n31 -> n32
+	n33 [label="lo" shape=plaintext, fontname=Courier]
+	n31 -> n33
+	n30 -> n31
+	n34 [label="decl: j" shape=trapezium]
+	n35 [label="Integer" shape=underline]
+	n34 -> n35
+	n36 [label="hi" shape=plaintext, fontname=Courier]
+	n34 -> n36
+	n30 -> n34
+	n37 [label="decl: pivot" shape=trapezium]
+	n38 [label="Integer" shape=underline]
+	n37 -> n38
+	n39 [label="[]" ]
+	n40 [label="a" shape=plaintext, fontname=Courier]
+	n41 [label="+" ]
+	n42 [label="lo" shape=plaintext, fontname=Courier]
+	n43 [label="/" ]
+	n44 [label="-" ]
+	n45 [label="hi" shape=plaintext, fontname=Courier]
+	n46 [label="lo" shape=plaintext, fontname=Courier]
+	n44 -> n45
+	n44 -> n46
+	n47 [label="2" shape=plaintext]
+	n43 -> n44
+	n43 -> n47
+	n41 -> n42
+	n41 -> n43
+	n39 -> n40
+	n39 -> n41
+	n37 -> n39
+	n30 -> n37
+	n48 [label="while" shape=trapezium]
+	n49 [label="<=" ]
+	n50 [label="i" shape=plaintext, fontname=Courier]
+	n51 [label="j" shape=plaintext, fontname=Courier]
+	n49 -> n50
+	n49 -> n51
+	n48 -> n49
+	n52 [label="{...}" shape=trapezium]
+	n53 [label="while" shape=trapezium]
+	n54 [label="<" ]
+	n55 [label="[]" ]
+	n56 [label="a" shape=plaintext, fontname=Courier]
+	n57 [label="i" shape=plaintext, fontname=Courier]
+	n55 -> n56
+	n55 -> n57
+	n58 [label="pivot" shape=plaintext, fontname=Courier]
+	n54 -> n55
+	n54 -> n58
+	n53 -> n54
+	n59 [label="{...}" shape=trapezium]
+	n60 [label="assign" shape=trapezium]
+	n61 [label="i" shape=plaintext, fontname=Courier]
+	n60 -> n61
+	n62 [label="+" ]
+	n63 [label="i" shape=plaintext, fontname=Courier]
+	n64 [label="1" shape=plaintext]
+	n62 -> n63
+	n62 -> n64
+	n60 -> n62
+	n59 -> n60
+	n53 -> n59
+	n52 -> n53
+	n65 [label="while" shape=trapezium]
+	n66 [label=">" ]
+	n67 [label="[]" ]
+	n68 [label="a" shape=plaintext, fontname=Courier]
+	n69 [label="j" shape=plaintext, fontname=Courier]
+	n67 -> n68
+	n67 -> n69
+	n70 [label="pivot" shape=plaintext, fontname=Courier]
+	n66 -> n67
+	n66 -> n70
+	n65 -> n66
+	n71 [label="{...}" shape=trapezium]
+	n72 [label="assign" shape=trapezium]
+	n73 [label="j" shape=plaintext, fontname=Courier]
+	n72 -> n73
+	n74 [label="-" ]
+	n75 [label="j" shape=plaintext, fontname=Courier]
+	n76 [label="1" shape=plaintext]
+	n74 -> n75
+	n74 -> n76
+	n72 -> n74
+	n71 -> n72
+	n65 -> n71
+	n52 -> n65
+	n77 [label="if-then" shape=trapezium]
+	n78 [label="<=" ]
+	n79 [label="i" shape=plaintext, fontname=Courier]
+	n80 [label="j" shape=plaintext, fontname=Courier]
+	n78 -> n79
+	n78 -> n80
+	n77 -> n78
+	n81 [label="{...}" shape=trapezium]
+	n82 [label="decl: t" shape=trapezium]
+	n83 [label="Integer" shape=underline]
+	n82 -> n83
+	n84 [label="[]" ]
+	n85 [label="a" shape=plaintext, fontname=Courier]
+	n86 [label="i" shape=plaintext, fontname=Courier]
+	n84 -> n85
+	n84 -> n86
+	n82 -> n84
+	n81 -> n82
+	n87 [label="assign" shape=trapezium]
+	n88 [label="[]" ]
+	n89 [label="a" shape=plaintext, fontname=Courier]
+	n90 [label="i" shape=plaintext, fontname=Courier]
+	n88 -> n89
+	n88 -> n90
+	n87 -> n88
+	n91 [label="[]" ]
+	n92 [label="a" shape=plaintext, fontname=Courier]
+	n93 [label="j" shape=plaintext, fontname=Courier]
+	n91 -> n92
+	n91 -> n93
+	n87 -> n91
+	n81 -> n87
+	n94 [label="assign" shape=trapezium]
+	n95 [label="[]" ]
+	n96 [label="a" shape=plaintext, fontname=Courier]
+	n97 [label="j" shape=plaintext, fontname=Courier]
+	n95 -> n96
+	n95 -> n97
+	n94 -> n95
+	n98 [label="t" shape=plaintext, fontname=Courier]
+	n94 -> n98
+	n81 -> n94
+	n77 -> n81
+	n52 -> n77
+	n48 -> n52
+	n30 -> n48
+	n99 [label="if-then" shape=trapezium]
+	n100 [label="<" ]
+	n101 [label="lo" shape=plaintext, fontname=Courier]
+	n102 [label="j" shape=plaintext, fontname=Courier]
+	n100 -> n101
+	n100 -> n102
+	n99 -> n100
+	n103 [label="Call: qsort" ]
+	n104 [label="ExprList" ]
+	n105 [label="a" shape=plaintext, fontname=Courier]
+	n104 -> n105
+	n106 [label="lo" shape=plaintext, fontname=Courier]
+	n104 -> n106
+	n107 [label="j" shape=plaintext, fontname=Courier]
+	n104 -> n107
+	n103 -> n104
+	n99 -> n103
+	n30 -> n99
+	n108 [label="if-then" shape=trapezium]
+	n109 [label="<" ]
+	n110 [label="i" shape=plaintext, fontname=Courier]
+	n111 [label="hi" shape=plaintext, fontname=Courier]
+	n109 -> n110
+	n109 -> n111
+	n108 -> n109
+	n112 [label="Call: qsort" ]
+	n113 [label="ExprList" ]
+	n114 [label="a" shape=plaintext, fontname=Courier]
+	n113 -> n114
+	n115 [label="i" shape=plaintext, fontname=Courier]
+	n113 -> n115
+	n116 [label="hi" shape=plaintext, fontname=Courier]
+	n113 -> n116
+	n112 -> n113
+	n108 -> n112
+	n30 -> n108
+	n21 -> n30
+	n0 -> n21
+	n117 [label="def: main()" shape=rect]
+	n118 [label="void" shape=underline]
+	n117 -> n118
+	n119 [label="{...}" shape=trapezium]
+	n120 [label="decl: s" shape=trapezium]
+	n121 [label="Array(1)" shape=underline]
+	n122 [label="Integer" shape=underline]
+	n121 -> n122
+	n120 -> n121
+	n123 [label="\"hello\"" shape=plaintext]
+	n120 -> n123
+	n119 -> n120
+	n124 [label="Call: sort" ]
+	n125 [label="ExprList" ]
+	n126 [label="s" shape=plaintext, fontname=Courier]
+	n125 -> n126
+	n124 -> n125
+	n119 -> n124
+	n127 [label="Call: println" ]
+	n128 [label="ExprList" ]
+	n129 [label="s" shape=plaintext, fontname=Courier]
+	n128 -> n129
+	n127 -> n128
+	n119 -> n127
+	n117 -> n119
+	n0 -> n117
 }

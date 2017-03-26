@@ -1,0 +1,5 @@
+// OK: simple expression
+
+int main(){
+  return 10 + 2;
+}

@@ -1,5 +1,0 @@
-// KO: Can create array only of type int or boolean. int[] found.
-
-void main(){
-    int[] a = new int[][3];
-}

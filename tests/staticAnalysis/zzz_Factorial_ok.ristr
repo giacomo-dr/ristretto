@@ -1,0 +1,15 @@
+// OK: factorial
+
+extern int[] int2str( int n );
+extern void println( int[] string );
+
+int fact( int n ){
+  if (n == 0)
+    return 1;
+  else
+    return n * fact(n-1);
+}
+
+void main() {
+  println( int2str( fact(10) ) );
+}

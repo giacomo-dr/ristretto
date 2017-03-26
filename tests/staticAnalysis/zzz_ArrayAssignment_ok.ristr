@@ -1,0 +1,8 @@
+// OK: a bunch of different array assignments
+
+void main( int[] x ){
+  x = new int[10];
+  int[][] y = new int[10][20];
+  x = y[2];
+  x[3] = y[2][3];
+}

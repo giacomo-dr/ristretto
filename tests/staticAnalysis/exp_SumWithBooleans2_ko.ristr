@@ -1,0 +1,5 @@
+// KO: int value expected.
+
+void main(){
+    int x = false + 10;
+}

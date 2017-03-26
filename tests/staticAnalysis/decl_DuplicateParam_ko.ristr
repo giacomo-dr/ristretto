@@ -1,0 +1,5 @@
+// KO: Duplicate definition of 'z' parameter.
+
+void main( int z, boolean z ){
+    return;
+}

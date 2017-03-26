@@ -1,0 +1,5 @@
+// KO: boolean value expected.
+
+void main( boolean z ){
+    z = !10;
+}

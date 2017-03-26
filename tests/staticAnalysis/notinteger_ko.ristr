@@ -1,5 +1,0 @@
-// KO: Duplicate param name
-
-void main( boolean z ){
-	z = !10;
-}

@@ -1,0 +1,5 @@
+// KO: Array literal elements must have the same type. First element is int but here we found boolean.
+
+void main(){
+	int[] a = {10, false};
+}

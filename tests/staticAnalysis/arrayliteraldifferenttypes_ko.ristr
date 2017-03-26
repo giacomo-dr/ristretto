@@ -1,5 +1,0 @@
-// KO: Array literal elements must have the same type.
-
-void main(){
-	int[] a = {10, false};
-}

@@ -1,5 +1,0 @@
-// KO: Wrong type in assignment
-
-void main( int x ){
-	x = false;
-}

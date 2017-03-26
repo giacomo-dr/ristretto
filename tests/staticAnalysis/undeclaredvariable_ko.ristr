@@ -1,5 +1,0 @@
-// KO: Undeclared variable
-
-int main(){
-	return c;
-}
