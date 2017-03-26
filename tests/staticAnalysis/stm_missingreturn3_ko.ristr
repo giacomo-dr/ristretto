@@ -1,0 +1,8 @@
+// KO: Function must return a value. Return expected.
+
+int main(){
+    if( true )
+        return 1;
+    else
+        int c = 10;
+}

@@ -16,9 +16,10 @@ public class BailErrorListener extends BaseErrorListener {
 	{
 		List<String> stack = ((Parser)recognizer).getRuleInvocationStack(); 
 		Collections.reverse(stack);
-		System.err.println("rule stack: "+stack);
-		System.err.println("line "+line+":"+charPositionInLine+" at "+
-				offendingSymbol+": "+msg);
+		System.err.println( "Parsing exception:" );
+		System.err.println( "\tline " + line + ":" + charPositionInLine + " at " +
+				offendingSymbol + ": " + msg );
+		System.err.println("\trule stack: "+stack);
 		System.exit( 1 );
 	}
 }

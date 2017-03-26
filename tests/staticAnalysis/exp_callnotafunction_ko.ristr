@@ -1,0 +1,5 @@
+// KO: Only functions can be called, int found.
+
+void main( int b ){
+    int c = b(10);
+}

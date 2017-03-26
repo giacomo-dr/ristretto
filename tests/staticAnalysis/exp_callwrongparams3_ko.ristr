@@ -1,0 +1,7 @@
+// KO: Function extern int(int, boolean) is not applicable to (boolean, boolean).
+
+extern int f( int a, boolean b );
+
+void main(){
+    int c = f(true, true);
+}

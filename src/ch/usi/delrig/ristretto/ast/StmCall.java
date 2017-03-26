@@ -1,12 +1,10 @@
 package ch.usi.delrig.ristretto.ast;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 public class StmCall extends Stm{
 	public final ExprCall e;
 
-	public StmCall( ParserRuleContext ctx, ExprCall e ) {
-		super( ctx );
+	public StmCall( FilePosition pos, ExprCall e ) {
+		super( pos );
 		this.e = e;
 	}
 

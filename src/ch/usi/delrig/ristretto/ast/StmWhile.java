@@ -1,13 +1,11 @@
 package ch.usi.delrig.ristretto.ast;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 public class StmWhile extends Stm {
 	public final Expr guard;
 	public final Stm body;
 	
-	public StmWhile( ParserRuleContext ctx, Expr guard, Stm body ) {
-		super( ctx );
+	public StmWhile( FilePosition pos, Expr guard, Stm body ) {
+		super( pos );
 		this.guard = guard;
 		this.body = body;
 	}

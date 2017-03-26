@@ -10,10 +10,14 @@ grammar Ristretto;
 
 // --- Grammar
 
-program : def+;
+module : def+;
 
-def : (type | 'void') IDE '(' params? ')' block
+def : funHeader block			# DefBlock
+	| 'extern' funHeader ';'	# DefExtern
 	;
+
+funHeader : (type | 'void') IDE '(' params? ')'
+		  ;
 
 params : param (',' param)* ;
 param : type IDE ;
@@ -46,15 +50,16 @@ exp : primary								# ExpPrimary
     | exp op=('&&' | '||') exp  			# ExpAndOr
     ;
 
-primary : primary '[' exp ']'		# ExpArray
-        | primary '.' 'length'		# ExpLength
-        | '{' exps '}'				# ExpList
-        | '(' exp ')'				# ExpParen
-        | call						# ExpCall
-        | IDE						# ExpIde
-        | val=('true' | 'false')	# ExpLitBool
-        | STRING					# ExpLitString
-        | INT						# ExpLitInt
+primary : primary '[' exp ']'			# ExpArray
+		| 'new' type ('[' exp ']')+		# ExpNewArray
+        | primary '.' 'length'			# ExpLength
+        | '{' exps '}'					# ExpList
+        | '(' exp ')'					# ExpParen
+        | call							# ExpCall
+        | IDE							# ExpIde
+        | val=('true' | 'false')		# ExpLitBool
+        | STRING						# ExpLitString
+        | INT							# ExpLitInt
         ;
 
 call : IDE '(' exps? ')'

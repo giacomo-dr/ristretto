@@ -1,0 +1,7 @@
+// KO: Function must return a value. Return expected.
+
+extern void f();
+
+int main(){
+    f();
+}

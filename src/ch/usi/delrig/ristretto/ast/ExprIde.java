@@ -1,13 +1,11 @@
 package ch.usi.delrig.ristretto.ast;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 public class ExprIde extends Expr{
 	
 	public final String name;
 
-	public ExprIde( ParserRuleContext ctx, String name ){
-		super( ctx );
+	public ExprIde( FilePosition pos, String name ){
+		super( pos );
 		this.name = name;
 	}
 

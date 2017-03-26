@@ -1,0 +1,5 @@
+// KO: Duplicate param name
+
+void main( int z, boolean z ){
+	return;
+}

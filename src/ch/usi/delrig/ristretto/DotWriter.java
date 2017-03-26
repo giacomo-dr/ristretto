@@ -15,9 +15,10 @@ import ch.usi.delrig.ristretto.ast.ExprIde;
 import ch.usi.delrig.ristretto.ast.ExprLength;
 import ch.usi.delrig.ristretto.ast.ExprList;
 import ch.usi.delrig.ristretto.ast.ExprLiteral;
+import ch.usi.delrig.ristretto.ast.ExprNewArray;
 import ch.usi.delrig.ristretto.ast.ExprUnary;
-import ch.usi.delrig.ristretto.ast.Param;
-import ch.usi.delrig.ristretto.ast.Program;
+import ch.usi.delrig.ristretto.ast.Parameter;
+import ch.usi.delrig.ristretto.ast.Module;
 import ch.usi.delrig.ristretto.ast.RistrettoASTVisitor;
 import ch.usi.delrig.ristretto.ast.Stm;
 import ch.usi.delrig.ristretto.ast.StmAssign;
@@ -27,9 +28,9 @@ import ch.usi.delrig.ristretto.ast.StmDeclare;
 import ch.usi.delrig.ristretto.ast.StmIfThenElse;
 import ch.usi.delrig.ristretto.ast.StmReturn;
 import ch.usi.delrig.ristretto.ast.StmWhile;
-import ch.usi.delrig.ristretto.ast.TypeArray;
-import ch.usi.delrig.ristretto.ast.TypeBoolean;
-import ch.usi.delrig.ristretto.ast.TypeInteger;
+import ch.usi.delrig.ristretto.ast.AstTypeArray;
+import ch.usi.delrig.ristretto.ast.AstTypeBoolean;
+import ch.usi.delrig.ristretto.ast.AstTypeInteger;
 
 public class DotWriter extends RistrettoASTVisitor<String> {
 	
@@ -41,9 +42,9 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 		out = new BufferedWriter(fstream);
 	}
 	
-	public void generate( Program p ) throws IOException{
+	public void generate( Module p ) throws IOException{
 		printPrologue();
-		visitProgram( p );
+		visitModule( p );
 		printEpilogue();
 		out.close();
 	}
@@ -82,9 +83,9 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 	}
 	
 	@Override
-	public String visitProgram( Program p ){
+	public String visitModule( Module p ){
 		String nn = getNextName();
-		writeNode( nn, "program", "shape=rect" );
+		writeNode( nn, "module '" + p.name + "'", "shape=rect" );
 		for( Definition d : p.dl ){
 			String in = d.accept( this );
 			writeEdge( nn, in );
@@ -93,7 +94,7 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 	}
 	
 	@Override
-	public String visitTypeArray( TypeArray t ){
+	public String visitAstTypeArray( AstTypeArray t ){
 		String nn = getNextName();
 		writeNode( nn, "Array(" + t.dimensions + ")", "shape=underline" );
 		String tn = t.t.accept( this );
@@ -102,14 +103,14 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 	}
 
 	@Override
-	public String visitTypeBoolean(TypeBoolean t) {
+	public String visitAstTypeBoolean(AstTypeBoolean t) {
 		String nn = getNextName();
 		writeNode( nn, "Boolean", "shape=underline"  );
 		return nn;
 	}
 
 	@Override
-	public String visitTypeInteger(TypeInteger t) {
+	public String visitAstTypeInteger(AstTypeInteger t) {
 		String nn = getNextName();
 		writeNode( nn, "Integer", "shape=underline"  );
 		return nn;
@@ -155,11 +156,24 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 	@Override
 	public String visitExprArray(ExprArray e) {
 		String nn = getNextName();
-		writeNode( nn, "array[]" );
+		writeNode( nn, "[]" );
 		String narr = e.earr.accept( this );
 		String nidx = e.eidx.accept( this );
 		writeEdge( nn, narr );
 		writeEdge( nn, nidx );
+		return nn;
+	}
+	
+	@Override
+	public String visitExprNewArray( ExprNewArray e ){
+		String nn = getNextName();
+		writeNode( nn, "new[]" );
+		String nt = e.type.accept( this );
+		writeEdge( nn, nt );
+		for( Expr d: e.dims ){
+			String nd = d.accept( this );
+			writeEdge( nn, nd );
+		}
 		return nn;
 	}
 
@@ -228,17 +242,23 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 		}else
 			tn = d.retType.accept( this );
 		writeEdge( nn, tn );
-		for( Param p : d.params ){
+		for( Parameter p : d.params ){
 			String pn = p.accept( this );
 			writeEdge( nn, pn );
 		}
-		String bn = d.b.accept( this );
+		String bn;
+		if( d.b != null ){
+			bn = d.b.accept( this );
+		}else{
+			bn = getNextName();
+			writeNode( bn, "extern", "shape=trapezium" );
+		}
 		writeEdge( nn, bn );
 		return nn;
 	}
 
 	@Override
-	public String visitParam( Param p ) {
+	public String visitParam( Parameter p ) {
 		String nn = getNextName();
 		writeNode( nn, "par: " + p.ide.name );
 		String tn = p.t.accept( this );
@@ -295,7 +315,7 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 	}
 
 	@Override
-	public String visitStmDeclare(StmDeclare b) {
+	public String visitStmDeclare( StmDeclare b ) {
 		String nn = getNextName();
 		writeNode( nn, "decl: " + b.ide.name, "shape=trapezium" );
 		String nt = b.t.accept( this );
@@ -320,5 +340,4 @@ public class DotWriter extends RistrettoASTVisitor<String> {
 		}
 		return nn;
 	}
-
 }

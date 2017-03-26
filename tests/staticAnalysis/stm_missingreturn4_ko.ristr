@@ -1,0 +1,5 @@
+// KO: Function must return a value. Return expected.
+
+int main( int x ){
+    x = x + 1;
+}

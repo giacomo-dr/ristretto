@@ -1,0 +1,5 @@
+// KO: A void function can not return a value.
+
+void main(){
+	return true;
+}

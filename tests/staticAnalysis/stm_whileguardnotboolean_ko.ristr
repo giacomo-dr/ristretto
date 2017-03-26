@@ -1,0 +1,6 @@
+// KO: While statement guard must evaluate to boolean, int found.
+
+void main(){
+	while( 10 )
+		return;
+}

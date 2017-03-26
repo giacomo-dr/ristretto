@@ -1,0 +1,19 @@
+digraph ristretto {
+	n0 [label="module 'samples/simple.ristr'" shape=rect]
+	n1 [label="def: f()" shape=rect]
+	n2 [label="void" shape=underline]
+	n1 -> n2
+	n3 [label="extern" shape=trapezium]
+	n1 -> n3
+	n0 -> n1
+	n4 [label="def: main()" shape=rect]
+	n5 [label="void" shape=underline]
+	n4 -> n5
+	n6 [label="{...}" shape=trapezium]
+	n7 [label="Call: f" ]
+	n8 [label="ExprList" ]
+	n7 -> n8
+	n6 -> n7
+	n4 -> n6
+	n0 -> n4
+}

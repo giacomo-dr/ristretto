@@ -1,0 +1,5 @@
+// KO: Array expected, found int.
+
+void main( int b ){
+    int c = b[10];
+}

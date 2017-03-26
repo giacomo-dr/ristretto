@@ -1,0 +1,5 @@
+// KO: Lenght can be applied only to arrays, boolean found.
+
+void main(){
+    int a = false.length;
+}

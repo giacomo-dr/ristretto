@@ -1,0 +1,5 @@
+// KO: Array dimensions must be integers.
+
+void main(){
+    int[] a = new int[false];
+}

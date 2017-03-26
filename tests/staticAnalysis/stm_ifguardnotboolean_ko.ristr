@@ -1,0 +1,6 @@
+// KO: If statement guard must evaluate to boolean, int found.
+
+void main(){
+	if( 10 )
+		return;
+}

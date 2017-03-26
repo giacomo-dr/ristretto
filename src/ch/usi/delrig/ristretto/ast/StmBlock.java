@@ -2,14 +2,12 @@ package ch.usi.delrig.ristretto.ast;
 
 import java.util.List;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 public class StmBlock extends Stm {
 	
 	public final List<Stm> stmlist;
 	
-	public StmBlock( ParserRuleContext ctx, List<Stm> stmlist ) {
-		super( ctx );
+	public StmBlock( FilePosition pos, List<Stm> stmlist ) {
+		super( pos );
 		this.stmlist = stmlist;
 	}
 

@@ -1,0 +1,5 @@
+// KO: Expression of type int expected.
+
+void main(){
+	int x = false + 10;
+}

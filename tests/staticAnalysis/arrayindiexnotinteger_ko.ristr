@@ -1,0 +1,5 @@
+// KO: Array indices must be integers.
+
+void main( int[] b ){
+    int a = b[false];
+}

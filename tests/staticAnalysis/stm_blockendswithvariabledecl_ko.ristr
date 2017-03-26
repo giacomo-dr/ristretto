@@ -1,0 +1,5 @@
+// KO: A block can't end with a variable declaration.
+
+void main(){
+	int k = 10;
+}

@@ -1,0 +1,7 @@
+// KO: Function extern int() is not applicable to (int).
+
+extern int f();
+
+void main(){
+    int c = f(1);
+}

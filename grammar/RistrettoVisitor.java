@@ -13,17 +13,31 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface RistrettoVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link RistrettoParser#program}.
+	 * Visit a parse tree produced by {@link RistrettoParser#module}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProgram(RistrettoParser.ProgramContext ctx);
+	T visitModule(RistrettoParser.ModuleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RistrettoParser#def}.
+	 * Visit a parse tree produced by the {@code DefBlock}
+	 * labeled alternative in {@link RistrettoParser#def}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDef(RistrettoParser.DefContext ctx);
+	T visitDefBlock(RistrettoParser.DefBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DefExtern}
+	 * labeled alternative in {@link RistrettoParser#def}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefExtern(RistrettoParser.DefExternContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RistrettoParser#funHeader}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunHeader(RistrettoParser.FunHeaderContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RistrettoParser#params}.
 	 * @param ctx the parse tree
@@ -210,6 +224,13 @@ public interface RistrettoVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpList(RistrettoParser.ExpListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ExpNewArray}
+	 * labeled alternative in {@link RistrettoParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpNewArray(RistrettoParser.ExpNewArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ExpLitString}
 	 * labeled alternative in {@link RistrettoParser#primary}.

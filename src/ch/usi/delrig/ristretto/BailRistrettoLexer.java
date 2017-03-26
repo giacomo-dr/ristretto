@@ -11,7 +11,6 @@ public class BailRistrettoLexer extends RistrettoLexer {
 	}
 	
 	public void recover( LexerNoViableAltException e ){
-		System.err.println( e );
 		System.exit( 1 );
 	}
 }

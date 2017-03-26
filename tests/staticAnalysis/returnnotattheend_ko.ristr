@@ -1,0 +1,6 @@
+// KO: A 'return' statement can only appear at the end of a function.
+
+int main(){
+	return 2;
+	int i = 0;
+}

@@ -2,14 +2,12 @@ package ch.usi.delrig.ristretto.ast;
 
 import java.util.List;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 public class ExprList extends Expr{
 	
 	public final List<Expr> el;
 
-	public ExprList( ParserRuleContext ctx, List<Expr> el ){
-		super( ctx );
+	public ExprList( FilePosition pos, List<Expr> el ){
+		super( pos );
 		this.el = el;
 	}
 

@@ -1,0 +1,7 @@
+// KO: Only void functions can be called, int found.
+
+extern int f();
+
+void main(){
+    f();
+}

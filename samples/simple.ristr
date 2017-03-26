@@ -1,5 +1,12 @@
 // Ristretto samples
 
+extern void f();
+
+int main(){
+    f();
+}
+
+
 /*
 void main(){ 
 	int[] a = {1, -sed[10], ({4 + - 5, -3 && !true}), fante(), "anto".length }; 
@@ -18,9 +25,12 @@ void main(){
 		z = 4;
 }
 */
+/*
+extern void print( int[] s );
 
 void f( int q, int z ){
-	return;
+	int[][] a = new int[10][20];
+	return a[1][2];
 }
 
 void main(){ 
@@ -32,5 +42,8 @@ void main(){
 			return z;
 		}
 }
+*/
+
+
 
 // Slip

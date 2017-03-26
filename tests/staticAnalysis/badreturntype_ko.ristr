@@ -1,0 +1,5 @@
+// KO: Missing return statement: empty block
+
+int main(){
+	return true;
+}

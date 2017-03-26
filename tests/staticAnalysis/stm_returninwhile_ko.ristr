@@ -1,0 +1,6 @@
+// KO: A 'return' statement can only appear at the end of a function.
+
+void main(){
+    while( true )
+        return;
+}

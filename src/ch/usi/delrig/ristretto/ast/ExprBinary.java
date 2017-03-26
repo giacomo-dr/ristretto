@@ -1,7 +1,5 @@
 package ch.usi.delrig.ristretto.ast;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
 public class ExprBinary extends Expr{
 	public enum Op{ MOD, DIV, MULT, MINUS, PLUS,
 		            GE, GT, LE, LT, NEQ, EQ,
@@ -10,8 +8,8 @@ public class ExprBinary extends Expr{
 	public final Expr el, er;
 	public final Op op;
 	
-	public ExprBinary( ParserRuleContext ctx, Expr el, Expr er, Op o ){
-		super( ctx );
+	public ExprBinary( FilePosition pos, Expr el, Expr er, Op o ){
+		super( pos );
 		this.el = el;
 		this.er = er;
 		this.op = o;

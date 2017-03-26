@@ -1,14 +1,12 @@
 package ch.usi.delrig.ristretto.ast;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+public class Parameter extends NodeBase{
 
-public class Param extends NodeBase{
-
-	public final Type t;
+	public final AstType t;
 	public final ExprIde ide;
 	
-	public Param( ParserRuleContext ctx, Type t, ExprIde ide ){
-		super( ctx );
+	public Parameter( FilePosition pos, AstType t, ExprIde ide ){
+		super( pos );
 		this.t = t;
 		this.ide = ide;
 	}
