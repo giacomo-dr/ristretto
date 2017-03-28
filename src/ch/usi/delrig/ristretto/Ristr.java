@@ -1,6 +1,5 @@
 package ch.usi.delrig.ristretto;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +21,9 @@ import ch.usi.delrig.ristretto.typechecker.TypeChecker;
  */
 public class Ristr {
 	
-    public final InstanceParameters params;
+    public final RistrParameters params;
     
-    public Ristr( InstanceParameters params ){
+    public Ristr( RistrParameters params ){
         this.params = params;
     }
 	
@@ -115,10 +114,10 @@ public class Ristr {
 	/**
 	 * Ristretto main entry point.
 	 * 
-	 * @param args Command line parameters. See InstanceParameters class for usage.
+	 * @param args Command line parameters. See RistrParameters class for usage.
 	 */
 	public static void main( String[] args ){
-	    InstanceParameters params = new InstanceParameters();
+	    RistrParameters params = new RistrParameters();
 	    params.parseCommandLineParameters( args );
 		Ristr instance = new Ristr( params );
 		instance.executeMainCommand();

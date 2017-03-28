@@ -1,4 +1,4 @@
-// KO: Function must return a value. Return expected.
+// KO: Return expected. Functions must end with a return in all paths to the end.
 
 int main( int x ){
     x = x + 1;

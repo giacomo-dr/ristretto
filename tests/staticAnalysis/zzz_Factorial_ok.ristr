@@ -12,4 +12,5 @@ int fact( int n ){
 
 void main() {
   println( int2str( fact(10) ) );
+  return;
 }

@@ -3,6 +3,7 @@
 void f(){
     int j = 3;
     j = -j;
+    return;
 }
 
 void main( int x ){

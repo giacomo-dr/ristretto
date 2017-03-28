@@ -1,16 +1,15 @@
 // Ristretto samples
 
-
-int f(){ return 2; }
-
-extern boolean zug( int a, int b );
-
-void main( int[] x ){
-    if( true ){
-        int x = 3 + zug( 1, 2 );
-    }
+void f( boolean x ){
+    int j = 3;
+    j = -j;
+    return;
 }
 
+void main( int x ){
+    while( true )
+        return;
+}
 
 
 /*

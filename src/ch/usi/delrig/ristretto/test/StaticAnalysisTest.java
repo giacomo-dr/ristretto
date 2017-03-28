@@ -7,15 +7,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.usi.delrig.ristretto.InstanceParameters;
+import ch.usi.delrig.ristretto.RistrParameters;
 import ch.usi.delrig.ristretto.Ristr;
 import ch.usi.delrig.ristretto.ast.Module;
 import ch.usi.delrig.ristretto.typechecker.StaticAnalysisException;
 import ch.usi.delrig.ristretto.typechecker.TypeChecker;
 
+/**
+ * Run all test cases on static analysis. Pass the folder containing 
+ * test cases as command line argument.
+ */
 public class StaticAnalysisTest {
     
-    private static Ristr ristrInstance = new Ristr( new InstanceParameters() );
+    private static Ristr ristrInstance = new Ristr( new RistrParameters() );
 
 	public static void main( String[] args ){
 		File dir = new File( args[0] );

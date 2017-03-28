@@ -36,6 +36,11 @@ import ch.usi.delrig.ristretto.ast.StmReturn;
 import ch.usi.delrig.ristretto.ast.StmWhile;
 import ch.usi.delrig.ristretto.typechecker.SymbolTable.Entry;
 
+/**
+ * Ristretto type checker and static analyzer.
+ * 
+ * @author Giacomo Del Rio
+ */
 public class TypeChecker extends RistrettoASTVisitor<Type> {
 	
 	private final SymbolTable symtbl = new SymbolTable();
@@ -98,9 +103,10 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 
 	
 	// #################### STATEMENTS AND BLOCKS ####################
-	// Statements are not implemented using AST visitor, since
-	// we know in advance what should be the expected type. Expected types
-	// are propagated downward in the three, rather than synthesized from leaves.
+	// Statements are not implemented using AST visitor, because, since
+	// we know in advance what should be the expected type, the most
+	// appropriate strategy is to inherit types from parent, rather than
+	// synthesize it from leaves.
 	// This allows a more accurate error reporting.
 	
 	@Override public Type visitStmBlock( StmBlock s ){ throw new UnsupportedOperationException(); }
@@ -111,6 +117,11 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 	@Override public Type visitStmWhile( StmWhile s ){ throw new UnsupportedOperationException(); }
 	@Override public Type visitStmCall( StmCall s ){ throw new UnsupportedOperationException(); }
 
+	/**
+     * When {@code expectedReturnType == null} the statement can't contain return(s) anywhere;<p>
+     * When {@code expectedReturnType == Void} the statement must definitely return with type void;<p>
+     * When {@code expectedReturnType == T} the statement must definitely return with type T;
+     */
 	public void typecheckStatement( Stm s, Type expectedReturnType ){
 		     if( s instanceof StmBlock ) typecheckStmBlock( (StmBlock)s, expectedReturnType );
 		else if( s instanceof StmAssign ) typecheckStmAssign( (StmAssign)s, expectedReturnType );
@@ -122,11 +133,6 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 		else throw new IllegalArgumentException( "Unknown statement type " + s );
 	}
 	
-	/**
-	 * When expectedReturnType == null the block can't contains return statements anywhere;
-	 * When expectedReturnType == Void the block may contain (void) return statements;
-	 * When expectedReturnType == T the block must definitely returns with type T;
-	 */
 	public void typecheckStmBlock( StmBlock blk, Type expectedReturnType ){ 
 	    typecheckStmBlock( blk, expectedReturnType, true ); 
 	}
@@ -135,7 +141,8 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 		
 		// Special case of empty blocks
 		if( bodyLen == 0 && expectedReturnType != null && !isVoid(expectedReturnType) )
-			throw new StaticAnalysisException( "The function must return a value.", blk.position );
+			throw new StaticAnalysisException( "The function must return" + 
+			        (!isVoid(expectedReturnType) ? " a value." : "."), blk.position );
 		
 		// Non empty blocks
 		if( pushNewFrame ) symtbl.pushFrame();
@@ -156,7 +163,7 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 	    if( !isBoolean(guardType) )
 	        throw new StaticAnalysisException( "If statement guard must evaluate to"
 	                + " boolean, " + guardType + " found.", ite.guard.position );
-	    if(  ite.thens instanceof StmDeclare )
+	    if( ite.thens instanceof StmDeclare )
             throw new StaticAnalysisException( "Variable declarations are allowed"
                     + " only in blocks.", ite.thens.position );
 	    typecheckStatement( ite.thens, expectedReturnType );
@@ -165,6 +172,10 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 	            throw new StaticAnalysisException( "Variable declarations are allowed"
 	                    + " only in blocks.", ite.elses.position );
 	        typecheckStatement( ite.elses, expectedReturnType );
+	    }else if( expectedReturnType != null ){
+	        throw new StaticAnalysisException( "Functions must end with a return"
+                    + " in all paths to the end.\n   Last statement of a block can't be"
+	                + " an if without an else branch.", ite.position );
 	    }
 	}
 	
@@ -200,8 +211,9 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 			throw new StaticAnalysisException( "Can't assign a value to a " + lType + " expression.",
 					asg.lvalue.position );
 	
-		if( expectedReturnType != null && !isVoid(expectedReturnType) )
-			throw new StaticAnalysisException( "Function must return a value. Return expected.", asg.position );
+		if( expectedReturnType != null )
+			throw new StaticAnalysisException( "Return expected. Functions must end with a return"
+			        + " in all paths to the end.", asg.position );
 	}
 
 	public void typecheckStmReturn( StmReturn ret, Type expectedReturnType ){
@@ -236,7 +248,8 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 					" expected.", decl.e.position );
 		
 		if( expectedReturnType != null && !isVoid(expectedReturnType) )
-			throw new StaticAnalysisException( "Function must return a value. Return expected.", decl.position );
+			throw new StaticAnalysisException( "Return expected. Functions must end with a return"
+			        + " in all paths to the end.", decl.position );
 		
 		symtbl.addSymbol( decl.ide.name, declType, decl.ide.position, currentModule );	
 	}
@@ -244,12 +257,13 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 	public void typecheckStmCall( StmCall call, Type expectedReturnType ){
 	    Type retType = call.e.accept( this );
 	    
-	    if( expectedReturnType != null && !isVoid(expectedReturnType) )
-            throw new StaticAnalysisException( "Function must return a value. Return expected.", call.position );
-	    
 	    if( !isVoid(retType) )
 	        throw new StaticAnalysisException( "Only void functions can be called, "
 	                + retType + " found.", call.position );
+	    
+	    if( expectedReturnType != null )
+            throw new StaticAnalysisException( "Return expected. Functions must end with a return"
+                    + " in all paths to the end.", call.position );
 	}
 
 	

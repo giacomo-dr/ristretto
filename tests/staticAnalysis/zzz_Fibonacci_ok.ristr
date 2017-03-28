@@ -12,4 +12,5 @@ int fib( int n ){
 
 void main(){
   println( int2str( fib(10) ) );
+  return;
 }

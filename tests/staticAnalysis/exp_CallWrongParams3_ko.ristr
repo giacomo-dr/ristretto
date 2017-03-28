@@ -1,4 +1,4 @@
-// KO: Function extern int(int, boolean) is not applicable to (boolean, boolean).
+// KO: Function int(int, boolean) is not applicable to (boolean, boolean).
 
 extern int f( int a, boolean b );
 

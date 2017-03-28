@@ -1,0 +1,11 @@
+// KO: Functions must end with a return in all paths to the end.
+
+extern int f( int a, boolean b );
+
+void main(){
+    int c = f(10 , true);
+    if( true ){
+        c = c + 1;
+        return;
+    }
+}

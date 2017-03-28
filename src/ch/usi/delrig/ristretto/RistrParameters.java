@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Holds all the parameters for an invocation of the main class Ristr.
  */
-public class InstanceParameters{
+public class RistrParameters{
     
     public enum MainCommand{ PARSE, TYPECHECK };
     
@@ -18,6 +18,8 @@ public class InstanceParameters{
     
     public void parseCommandLineParameters( String[] args ){
         try {
+            if( args.length < 2 )
+                throw new IllegalArgumentException( "please specify a command and a filename" );
             if( !args[0].startsWith("-") || args[0].length() != 2 ) 
                 throw new IllegalArgumentException( "please specify an unique command" );
             switch( args[0].charAt(1) ){
@@ -45,11 +47,20 @@ public class InstanceParameters{
                 throw new IllegalArgumentException( "please specify an input file" );
         }catch( IllegalArgumentException ex ){
             System.err.println( "Error: " + ex.getMessage() );
-            System.err.println( "usage: Ristr command [-v] [-dot outfile] filename" );
-            System.err.println( "\tcommand must be one of the following:" );
-            System.err.println( "\t-p\t parse filename" );
-            System.err.println( "\t-t\t parse and typecheck filename" );
+            showUsage();
             System.exit(1);
         }
+    }
+    
+    public static void showUsage(){
+        System.out.println( "usage: Ristr command [options] filename" );
+        System.out.println( "\tcommand must be one of the following:" );
+        System.out.println( "\t-p\t parse filename" );
+        System.out.println( "\t-t\t parse and typecheck filename" );
+        System.out.println( "\toptions can be:" );
+        System.out.println( "\t-v\t\t verbose" );
+        System.out.println( "\t-dot outfile\t write a dot representation of the intermediate\n"
+                + "\t\t\t language produced by the command into outfile" );
+        
     }
 }

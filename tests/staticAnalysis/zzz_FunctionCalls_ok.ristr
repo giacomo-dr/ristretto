@@ -9,4 +9,5 @@ void main( int[] x ){
     int y = f();
     boolean b = zug( y, f() );
     b = !b;
+    return;
 }

@@ -14,4 +14,5 @@ int gcd(int a, int b) {
 
 void main() {
   println( int2str( gcd(12, 10) ) );
+  return;
 }

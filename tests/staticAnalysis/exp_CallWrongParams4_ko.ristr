@@ -1,4 +1,4 @@
-// KO: Function extern int() is not applicable to (int).
+// KO: Function int() is not applicable to (int).
 
 extern int f();
 
