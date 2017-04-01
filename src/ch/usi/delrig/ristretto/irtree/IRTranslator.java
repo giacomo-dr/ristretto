@@ -1,5 +1,8 @@
 package ch.usi.delrig.ristretto.irtree;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import ch.usi.delrig.ristretto.ast.AstTypeArray;
 import ch.usi.delrig.ristretto.ast.AstTypeBoolean;
 import ch.usi.delrig.ristretto.ast.AstTypeInteger;
@@ -29,9 +32,26 @@ import ch.usi.delrig.ristretto.irtree.IRExpOperation.Op;
  * AST to IRTree translator.
  */
 public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
-
-    public IRTranslator(){}
     
+    // Map from labels to array contents used to gather array literals
+    public final Map<String, String> initializedArrays;
+    
+    private int nextLabel;
+    private int nextTemporary;
+
+    public IRTranslator(){
+        initializedArrays = new TreeMap<String, String>();
+        nextLabel = 0;
+        nextTemporary = 0;
+    }
+    
+    private String newLabel(){
+        return "" + nextLabel++;
+    }
+    
+    private String newTemp(){
+        return "" + nextTemporary++;
+    }
     
     // #################### MODULE ####################
     
@@ -175,8 +195,7 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitExprCall( ExprCall e ){
+    @Override public IRTreeNodeBase visitExprCall( ExprCall e ){
         // TODO Auto-generated method stub
         return null;
     }
@@ -193,8 +212,12 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
             return new IRExpInteger( (Long)e.val );    
         case BOOLEAN:
             boolean b = (Boolean)e.val;
-            return new IRExpInteger( b ? 1 : 0 );      
+            return new IRExpInteger( b ? 1 : 0 );
         case STRING:
+            String s = (String)e.val;
+            String lbl = newLabel();
+            initializedArrays.put( lbl, s );
+            return new IRExpLabel( lbl );
         default:
             throw new UnsupportedOperationException( "Not implemented." );
         }

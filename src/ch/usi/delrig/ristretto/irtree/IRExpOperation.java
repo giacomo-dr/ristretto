@@ -15,6 +15,6 @@ public class IRExpOperation extends IRExp{
     }
     
     @Override public <T> T accept( RistrettoIRVisitor<T> e ){
-        return e.visitExpOperation( this );
+        return e.visitIRExpOperation( this );
     }
 }
