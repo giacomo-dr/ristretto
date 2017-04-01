@@ -10,6 +10,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import ch.usi.delrig.ristretto.antlrparser.RistrettoParser;
 import ch.usi.delrig.ristretto.ast.ASTBuilder;
 import ch.usi.delrig.ristretto.ast.Module;
+import ch.usi.delrig.ristretto.irtree.IRTranslator;
+import ch.usi.delrig.ristretto.irtree.IRTreeNodeBase;
 import ch.usi.delrig.ristretto.typechecker.StaticAnalysisException;
 import ch.usi.delrig.ristretto.typechecker.TypeChecker;
 
@@ -72,11 +74,19 @@ public class Ristr {
 		}
 	}
 	
+	public IRTreeNodeBase translateToIRTree( Module m ){
+	    info( "Begin translation to IR Tree..." );
+        IRTranslator irtranslator = new IRTranslator();
+        IRTreeNodeBase ir = irtranslator.translate( m );
+        info( "Translation to IR Tree completed." );
+        return ir;
+	}
+	
 	private void makeDotFile( Module m ){
 		try{
 		    // Write a DOT representation of the AST
 	        info( "Create dot file." );
-	        DotWriter dw = new DotWriter( params.dotFilename );
+	        AstDotWriter dw = new AstDotWriter( params.dotFilename );
 	        dw.generate( m );
 	        
     		Process tr = Runtime.getRuntime().exec( 
@@ -89,26 +99,57 @@ public class Ristr {
 		}
 	}
 	
+	private void makeDotFile( IRTreeNodeBase ir ){
+        try{
+            // Write a DOT representation of the AST
+            info( "Create dot file." );
+            IRDotWriter dw = new IRDotWriter( params.dotFilename );
+            dw.generate( ir );
+            
+            Process tr = Runtime.getRuntime().exec( 
+                    new String[]{ "/usr/local/bin/dot", "-Tpdf", "-o", 
+                            params.dotFilename + ".pdf", params.dotFilename } );
+            tr.waitFor();
+        }catch( Exception e ){
+            System.err.println( e );
+            System.exit( 0 );
+        }
+    }
+	
 	/**
 	 * Executes the main command specified in parameters.
 	 */
 	public void executeMainCommand(){
 	    Module m = null;
+	    List<Module> modules = null;
+	    IRTreeNodeBase ir;
+	    
         switch( params.mainCommand ){
         case PARSE: // Parse only
             m = parseFile( params.inputFiles.get( 0 ) );
+            if( params.makeDot )
+                makeDotFile( m );
             break;
             
         case TYPECHECK: // Parse and typecheck
             m = parseFile( params.inputFiles.get( 0 ) );
-            List<Module> modules = new ArrayList<Module>();
+            modules = new ArrayList<Module>();
             modules.add( m );
             typeCheck( modules );
+            if( params.makeDot )
+                makeDotFile( m );
+            break;
+            
+        case IRTREE: // Parse, typecheck and convert to IR Tree
+            m = parseFile( params.inputFiles.get( 0 ) );
+            modules = new ArrayList<Module>();
+            modules.add( m );
+            typeCheck( modules );
+            ir = translateToIRTree( m );
+            if( params.makeDot )
+                makeDotFile( ir );
             break;
         }
-        
-        if( params.makeDot )
-            makeDotFile( m );
     }
 
 	/**

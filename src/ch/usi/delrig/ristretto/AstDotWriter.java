@@ -32,12 +32,12 @@ import ch.usi.delrig.ristretto.ast.AstTypeArray;
 import ch.usi.delrig.ristretto.ast.AstTypeBoolean;
 import ch.usi.delrig.ristretto.ast.AstTypeInteger;
 
-public class DotWriter extends RistrettoASTVisitor<String> {
+public class AstDotWriter extends RistrettoASTVisitor<String> {
 	
 	private BufferedWriter out;
 	private int nextName = 0;
 	
-	public DotWriter( String filename ) throws IOException{
+	public AstDotWriter( String filename ) throws IOException{
 		FileWriter fstream = new FileWriter( filename, false );
 		out = new BufferedWriter(fstream);
 	}

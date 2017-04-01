@@ -1,14 +1,9 @@
 // Ristretto samples
 
-void f( boolean x ){
-    int j = 3;
-    j = -j;
-    return;
-}
 
-void main( int x ){
-    while( true )
-        return;
+void main( int x, boolean b ){
+    int z = 3 + 2;
+    return;
 }
 
 

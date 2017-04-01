@@ -43,10 +43,15 @@ import ch.usi.delrig.ristretto.typechecker.SymbolTable.Entry;
  */
 public class TypeChecker extends RistrettoASTVisitor<Type> {
 	
+    private final AstAttributeMap attributes = new AstAttributeMap();
 	private final SymbolTable symtbl = new SymbolTable();
 	private String currentModule = null;
 	
 	public TypeChecker(){
+	}
+	
+	public AstAttributeMap getAttributes(){
+	    return attributes;
 	}
 	
 	public void check( List<Module> modules ) throws StaticAnalysisException{

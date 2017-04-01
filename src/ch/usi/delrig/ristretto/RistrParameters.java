@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class RistrParameters{
     
-    public enum MainCommand{ PARSE, TYPECHECK };
+    public enum MainCommand{ PARSE, TYPECHECK, IRTREE };
     
     public MainCommand mainCommand = MainCommand.PARSE;
     public boolean verbose = false;
@@ -25,6 +25,7 @@ public class RistrParameters{
             switch( args[0].charAt(1) ){
             case 'p': mainCommand = MainCommand.PARSE; break;
             case 't': mainCommand = MainCommand.TYPECHECK; break;
+            case 'i': mainCommand = MainCommand.IRTREE; break;
             default:
                 throw new IllegalArgumentException( "unknown command '" + args[0].charAt(1) + "'" );
             }
@@ -57,6 +58,7 @@ public class RistrParameters{
         System.out.println( "\tcommand must be one of the following:" );
         System.out.println( "\t-p\t parse filename" );
         System.out.println( "\t-t\t parse and typecheck filename" );
+        System.out.println( "\t-i\t parse, typecheck and convert to IR Tree filename" );
         System.out.println( "\toptions can be:" );
         System.out.println( "\t-v\t\t verbose" );
         System.out.println( "\t-dot outfile\t write a dot representation of the intermediate\n"
