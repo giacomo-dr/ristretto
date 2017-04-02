@@ -9,7 +9,7 @@ public class IRExpTemp extends IRExp{
     }
     
     @Override public String toString(){
-        return "%" + temp;
+        return temp;
     }
     
     @Override public boolean equals( Object o ){

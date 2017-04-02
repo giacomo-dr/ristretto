@@ -70,7 +70,7 @@ public class TypeChecker extends RistrettoASTVisitor<Type> {
 		
 		symtbl.popFrame();
 		if( !symtbl.hasNoFrames() )
-			throw new RuntimeException( "Invalid status of symbol table at end of checking." );
+			throw new RuntimeException( "Invalid status of symbol table at end of type checking." );
 	}
 
 	

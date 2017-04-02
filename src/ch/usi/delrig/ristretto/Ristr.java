@@ -74,12 +74,12 @@ public class Ristr {
 		}
 	}
 	
-	public IRTreeNodeBase translateToIRTree( Module m ){
+	public IRTreeNodeBase translateToIRTree( List<Module> modules ){
 	    info( "Begin translation to IR Tree..." );
         IRTranslator irtranslator = new IRTranslator();
-        IRTreeNodeBase ir = irtranslator.translate( m );
+        List<IRTreeNodeBase> ir = irtranslator.translate( modules );
         info( "Translation to IR Tree completed." );
-        return ir;
+        return ir.get(0);
 	}
 	
 	private void makeDotFile( Module m ){
@@ -145,7 +145,7 @@ public class Ristr {
             modules = new ArrayList<Module>();
             modules.add( m );
             typeCheck( modules );
-            ir = translateToIRTree( m );
+            ir = translateToIRTree( modules );
             if( params.makeDot )
                 makeDotFile( ir );
             break;

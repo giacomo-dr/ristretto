@@ -2,7 +2,7 @@
 
 
 void main( int x, boolean b ){
-    int[] z = "sandracca";
+    int[] z = "canciello";
     return;
 }
 

@@ -9,7 +9,7 @@ public class IRExpLabel extends IRExp{
     }
     
     @Override public String toString(){
-        return "$" + label;
+        return label;
     }
     
     @Override public boolean equals( Object o ){
