@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import ch.usi.delrig.ristretto.antlrparser.RistrettoParser;
 import ch.usi.delrig.ristretto.ast.ASTBuilder;
 import ch.usi.delrig.ristretto.ast.Module;
+import ch.usi.delrig.ristretto.irtree.IRProcedure;
 import ch.usi.delrig.ristretto.irtree.IRTranslator;
 import ch.usi.delrig.ristretto.irtree.IRTreeNodeBase;
 import ch.usi.delrig.ristretto.typechecker.StaticAnalysisException;
@@ -74,12 +75,12 @@ public class Ristr {
 		}
 	}
 	
-	public IRTreeNodeBase translateToIRTree( List<Module> modules ){
+	public List<IRProcedure> translateToIRTree( List<Module> modules ){
 	    info( "Begin translation to IR Tree..." );
         IRTranslator irtranslator = new IRTranslator();
-        List<IRTreeNodeBase> ir = irtranslator.translate( modules );
+        List<IRProcedure> ir = irtranslator.translate( modules );
         info( "Translation to IR Tree completed." );
-        return ir.get(0);
+        return ir;
 	}
 	
 	private void makeDotFile( Module m ){
@@ -111,7 +112,7 @@ public class Ristr {
                             params.dotFilename + ".pdf", params.dotFilename } );
             tr.waitFor();
         }catch( Exception e ){
-            System.err.println( e );
+            e.printStackTrace();
             System.exit( 0 );
         }
     }
@@ -145,7 +146,7 @@ public class Ristr {
             modules = new ArrayList<Module>();
             modules.add( m );
             typeCheck( modules );
-            ir = translateToIRTree( modules );
+            ir = translateToIRTree( modules ).get( 0 );
             if( params.makeDot )
                 makeDotFile( ir );
             break;

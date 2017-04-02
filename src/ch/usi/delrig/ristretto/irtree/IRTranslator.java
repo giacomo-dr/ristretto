@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ch.usi.delrig.ristretto.ast.AstTypeArray;
-import ch.usi.delrig.ristretto.ast.AstTypeBoolean;
-import ch.usi.delrig.ristretto.ast.AstTypeInteger;
 import ch.usi.delrig.ristretto.ast.Definition;
+import ch.usi.delrig.ristretto.ast.Expr;
 import ch.usi.delrig.ristretto.ast.ExprArray;
 import ch.usi.delrig.ristretto.ast.ExprBinary;
 import ch.usi.delrig.ristretto.ast.ExprCall;
@@ -20,7 +18,6 @@ import ch.usi.delrig.ristretto.ast.ExprNewArray;
 import ch.usi.delrig.ristretto.ast.ExprUnary;
 import ch.usi.delrig.ristretto.ast.Module;
 import ch.usi.delrig.ristretto.ast.Parameter;
-import ch.usi.delrig.ristretto.ast.RistrettoASTVisitor;
 import ch.usi.delrig.ristretto.ast.StmAssign;
 import ch.usi.delrig.ristretto.ast.StmBlock;
 import ch.usi.delrig.ristretto.ast.StmCall;
@@ -31,11 +28,13 @@ import ch.usi.delrig.ristretto.ast.StmWhile;
 import ch.usi.delrig.ristretto.irtree.IRExpOperation.Op;
 import ch.usi.delrig.ristretto.irtree.SymbolTable.Entry;
 import ch.usi.delrig.ristretto.typechecker.StaticAnalysisException;
+import ch.usi.delrig.ristretto.typechecker.Type;
+import ch.usi.delrig.ristretto.typechecker.TypeFunction;
 
 /**
  * AST to IRTree translator.
  */
-public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
+public class IRTranslator{
     
     // Map from labels to array contents used to gather array literals
     public final Map<String, String> initializedArrays;
@@ -51,7 +50,7 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
         nextTemporary = 0;
     }
     
-    public List<IRTreeNodeBase> translate( List<Module> modules ) throws StaticAnalysisException{
+    public List<IRProcedure> translate( List<Module> modules ) throws StaticAnalysisException{
         symtable.pushFrame();
         
         // Bind all function names to a new label
@@ -60,11 +59,9 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
         symtable.dump( System.out );
         
         // Translate each module one by one
-        // TODO Return some value!!!
-        List<IRTreeNodeBase> res = new ArrayList<IRTreeNodeBase>();
-        res.add( modules.get(0).accept( this ) );
-        //for( Module m : modules )
-        //    m.accept( this );
+        List<IRProcedure> res = new ArrayList<IRProcedure>();
+        for( Module m : modules )
+            res.addAll( translateModule( m ) );
         
         symtable.popFrame();
         if( !symtable.hasNoFrames() )
@@ -72,122 +69,102 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
         return res;
     }
     
-    
-    // #################### PRIVATE METHODS ####################
-    
-    private String newLabel( String suffix ){
-        return "$" + (nextLabel++) + (suffix == null ? "" : "-" + suffix);
-    }
-    private String newLabel(){ return newLabel( null ); }
-    
-    private String newTemp( String suffix ){
-        return "%" + (nextTemporary++) + (suffix == null ? "" : "-" + suffix);
-    }
-    private String newTemp(){ return newTemp( null ); }
-    
-    private void bindTopLevelNamesToNewLabels( Module m ) throws StaticAnalysisException{
-        for( Definition d: m.dl ){
-            Entry prev = symtable.lookup( d.name.name );
-            if( prev != null )
-                throw new IllegalArgumentException( "Function name already bound." );
-            
-            symtable.bindToLabel( d.name.name, newLabel( d.name.name ) );
-        }
-    }
-    
     // #################### MODULE ####################
 
-    @Override public IRTreeNodeBase visitModule( Module m ){
+    public List<IRProcedure> translateModule( Module m ){
         List<IRProcedure> procs = new ArrayList<IRProcedure>();
         for( Definition d: m.dl )
-            procs.add( (IRProcedure)d.accept( this ) );
-        return procs.get( 0 );
-        
-//        symtable.pushFrame();
-//        StmDeclare decl = (StmDeclare)m.dl.get( 0 ).b.stmlist.get( 0 );
-//        IRTreeNodeBase res = decl.accept( this );
-//        symtable.popFrame();
-//        return res;
+            procs.add( translateDefinition( d ) );
+        return procs;
     }
 
     
     // #################### DEFINITIONS AND PARAMETERS ####################
     
-    @Override
-    public IRTreeNodeBase visitDefinition( Definition d ){
-        // TODO Auto-generated method stub
-        return null;
+    public IRProcedure translateDefinition( Definition d ){
+        symtable.pushFrame();
+        List<String> args = bindArgumentsToNewTemporaries( d.params );
+        List<IRStm> stmtLst = translateStmBlock( d.b );
+        String funLabel = symtable.lookup( d.name.name ).label;
+        StmDeclare decl = (StmDeclare)d.b.stmlist.get( 0 );
+        IRProcedure proc = new IRProcedure( funLabel , args, 
+                new IRExpBegin( stmtLst, translateExpr( decl.e ) ) );
+        symtable.dump( System.out );
+        symtable.popFrame();
+        return proc;
     }
-
-    @Override
-    public IRTreeNodeBase visitParam( Parameter p ){
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+    
     
     // #################### STATEMENTS AND BLOCKS ####################
     
-    @Override
-    public IRTreeNodeBase visitStmIfThenElse( StmIfThenElse b ){
+    public List<IRStm> translateStmIfThenElse( StmIfThenElse s ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitStmWhile( StmWhile b ){
+    public List<IRStm> translateStmWhile( StmWhile s ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitStmAssign( StmAssign b ){
+    public List<IRStm> translateStmAssign( StmAssign s ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitStmReturn( StmReturn b ){
+    public List<IRStm> translateStmReturn( StmReturn s ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public IRTreeNodeBase visitStmDeclare( StmDeclare b ){
-        String tmp = newTemp( b.ide.name );
-        symtable.bindToTemp( b.ide.name, tmp );
-        IRExp irexp = (IRExp)b.e.accept( this );
-        return new IRStmMove( tmp, irexp );
+    public List<IRStm> translateStmDeclare( StmDeclare s ){
+        String tmp = newTemp( s.ide.name );
+        symtable.bindToTemp( s.ide.name, tmp );
+        IRExp irexp = translateExpr( s.e );
+        return newStmList( new IRStmMove( tmp, irexp ) );
     }
 
-    @Override
-    public IRTreeNodeBase visitStmCall( StmCall b ){
+    public List<IRStm> translateStmCall( StmCall s ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitStmBlock( StmBlock b ){
+    public List<IRStm> translateStmBlock( StmBlock s ){
         // TODO Auto-generated method stub
-        return null;
+        return newStmList( new IRStmNop() );
     }
     
     
     // #################### EXPRESSIONS ####################
 
-    @Override
-    public IRTreeNodeBase visitExprUnary( ExprUnary e ){
+    public IRExp translateExpr( Expr e ){
+             if( e instanceof ExprUnary ) return translateExprUnary( (ExprUnary)e );
+        else if( e instanceof ExprBinary ) return translateExprBinary( (ExprBinary)e );
+        else if( e instanceof ExprArray ) return translateExprArray( (ExprArray)e );
+        else if( e instanceof ExprNewArray ) return translateExprNewArray( (ExprNewArray)e );
+        else if( e instanceof ExprLength ) return translateExprLength( (ExprLength)e );
+        else if( e instanceof ExprList ) return translateExprList( (ExprList)e );
+        else if( e instanceof ExprCall ) return translateExprCall( (ExprCall)e );
+        else if( e instanceof ExprIde ) return translateExprIde( (ExprIde)e );
+        else if( e instanceof ExprLiteral ) return translateExprLiteral( (ExprLiteral)e );
+        else throw new IllegalArgumentException( "Unknown expression type " + e );
+    }
+    
+    public IRExp translateExprUnary( ExprUnary e ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public IRTreeNodeBase visitExprBinary( ExprBinary e ){
-        IRExp lexp = (IRExp)e.el.accept(this);
-        IRExp rexp = (IRExp)e.el.accept(this);
+    public IRExp translateExprBinary( ExprBinary e ){
+        IRExp lexp = translateExpr( e.el );
+        IRExp rexp = translateExpr( e.el );
         switch( e.op ){
         case MINUS:
             return new IRExpOperation( lexp, rexp, Op.SUB );
         case PLUS:
             return new IRExpOperation( lexp, rexp, Op.ADD );
+        case MULT:
+            return new IRExpOperation( lexp, rexp, Op.MUL );
         case AND:
             return null;
         case DIV:
@@ -204,8 +181,6 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
             break;
         case MOD:
             break;
-        case MULT:
-            break;
         case NEQ:
             break;
         case OR:
@@ -216,36 +191,32 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
         throw new IllegalArgumentException( "Should not get there." );
     }
 
-    @Override
-    public IRTreeNodeBase visitExprArray( ExprArray e ){
+    public IRExp translateExprArray( ExprArray e ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitExprNewArray( ExprNewArray e ){
+    public IRExp translateExprNewArray( ExprNewArray e ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitExprLength( ExprLength e ){
+    public IRExp translateExprLength( ExprLength e ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public IRTreeNodeBase visitExprList( ExprList e ){
+    public IRExp translateExprList( ExprList e ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public IRTreeNodeBase visitExprCall( ExprCall e ){
+    public IRExp translateExprCall( ExprCall e ){
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override public IRTreeNodeBase visitExprIde( ExprIde e ){
+    public IRExp translateExprIde( ExprIde e ){
         Entry tempOrLabel = symtable.lookup( e.name );
         if( tempOrLabel == null )
             throw new IllegalArgumentException( "Undefined name " + e.name );
@@ -256,7 +227,7 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
             return new IRExpTemp( tempOrLabel.temp );
     }
 
-    @Override public IRTreeNodeBase visitExprLiteral( ExprLiteral e ){
+    public IRExp translateExprLiteral( ExprLiteral e ){
         switch( e.t ){
         case INT:
             return new IRExpInteger( (Long)e.val );    
@@ -274,23 +245,36 @@ public class IRTranslator extends RistrettoASTVisitor<IRTreeNodeBase>{
     }
     
     
-    // #################### TYPES ####################
-
-    @Override
-    public IRTreeNodeBase visitAstTypeArray( AstTypeArray t ){
-        // TODO Auto-generated method stub
-        return null;
+    // #################### PRIVATE METHODS ####################
+    
+    private String newLabel( String suffix ){
+        return "$" + (nextLabel++) + (suffix == null ? "" : "-" + suffix);
     }
-
-    @Override
-    public IRTreeNodeBase visitAstTypeBoolean( AstTypeBoolean t ){
-        // TODO Auto-generated method stub
-        return null;
+    private String newLabel(){ return newLabel( null ); }
+    
+    private String newTemp( String suffix ){
+        return "%" + (nextTemporary++) + (suffix == null ? "" : "-" + suffix);
     }
-
-    @Override
-    public IRTreeNodeBase visitAstTypeInteger( AstTypeInteger t ){
-        // TODO Auto-generated method stub
-        return null;
+    private String newTemp(){ return newTemp( null ); }
+    
+    private void bindTopLevelNamesToNewLabels( Module m ) throws StaticAnalysisException{
+        for( Definition d: m.dl )
+            symtable.bindToLabel( d.name.name, newLabel( d.name.name ) );
+    }
+    
+    private List<String> bindArgumentsToNewTemporaries( List<Parameter> params ){
+        List<String> tempLst = new ArrayList<String>();
+        for( Parameter p: params ){
+            String t = newTemp( p.ide.name );
+            tempLst.add( t );
+            symtable.bindToTemp( p.ide.name, t );
+        }
+        return tempLst;
+    }
+    
+    private List<IRStm> newStmList( IRStm s ){
+        List<IRStm> lst = new ArrayList<IRStm>();
+        lst.add( s );
+        return lst;
     }
 }

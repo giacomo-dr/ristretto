@@ -161,7 +161,7 @@ public class IRDotWriter extends RistrettoIRVisitor<String> {
     }
     
     @Override public String visitIRProcedure( IRProcedure s ){
-        String name = s.label + "( " + String.join( ", ", s.argNames ) + ")";
+        String name = s.label + "( " + String.join( ", ", s.argNames ) + " )";
         String nn = writeNode( name );
         writeEdge( nn, s.body.accept(this) );
         return nn;
